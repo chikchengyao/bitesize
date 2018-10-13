@@ -29,12 +29,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 import com.google.ar.core.Anchor;
+import com.google.ar.core.Frame;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
+import com.google.ar.core.Trackable;
+import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
+import java.util.List;
 import sg.bitesize.app.R;
 
 /**
@@ -44,9 +48,12 @@ public class MainActivity extends AppCompatActivity {
   private static final String TAG = MainActivity.class.getSimpleName();
   private static final double MIN_OPENGL_VERSION = 3.0;
 
-  private FloatingActionButton addButton;
   private ArFragment arFragment;
+  private boolean isTracking;
+  private boolean isHitting;
+  private FloatingActionButton addButton;
   private ModelRenderable andyRenderable;
+  private PointerDrawable pointer = new PointerDrawable();
 
   @Override
   @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
@@ -64,7 +71,11 @@ public class MainActivity extends AppCompatActivity {
     addButton = findViewById(R.id.add_button);
 
     addButton.setOnClickListener((View view) -> {
-            Toast toast = Toast.makeText(getApplicationContext(), "Opening the menu...", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(
+                getApplicationContext(),
+                String.format("isTracking: %s; isHitting: %s", isTracking, isHitting),
+                Toast.LENGTH_LONG
+            );
             toast.setGravity(Gravity.BOTTOM, 0, 0);
             toast.show();
         }
@@ -103,6 +114,11 @@ public class MainActivity extends AppCompatActivity {
           andy.setRenderable(andyRenderable);
           andy.select();
         });
+
+    arFragment.getArSceneView().getScene().addOnUpdateListener(frameTime -> {
+        arFragment.onUpdate(frameTime);
+        onUpdate();
+    });
   }
 
   protected void onResume(){
@@ -139,4 +155,57 @@ public class MainActivity extends AppCompatActivity {
     }
     return true;
   }
+
+   private void onUpdate() {
+      boolean trackingChanged = updateTracking();
+      View contentView = findViewById(android.R.id.content);
+      if (trackingChanged) {
+          if (isTracking) {
+              contentView.getOverlay().add(pointer);
+          } else {
+              contentView.getOverlay().remove(pointer);
+          }
+          contentView.invalidate();
+      }
+
+      if (isTracking) {
+          boolean hitTestChanged = updateHitTest();
+          if (hitTestChanged) {
+              pointer.setEnabled(isHitting);
+              contentView.invalidate();
+          }
+      }
+  }
+
+  private boolean updateTracking() {
+      Frame frame = arFragment.getArSceneView().getArFrame();
+      boolean wasTracking = isTracking;
+      isTracking = frame != null && frame.getCamera().getTrackingState() == TrackingState.TRACKING;
+      return isTracking != wasTracking;
+  }
+
+    private boolean updateHitTest() {
+        Frame frame = arFragment.getArSceneView().getArFrame();
+        android.graphics.Point pt = getScreenCenter();
+        List<HitResult> hits;
+        boolean wasHitting = isHitting;
+        isHitting = false;
+        if (frame != null) {
+            hits = frame.hitTest(pt.x, pt.y);
+            for (HitResult hit : hits) {
+                Trackable trackable = hit.getTrackable();
+                if (trackable instanceof Plane &&
+                        ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
+                    isHitting = true;
+                    break;
+                }
+            }
+        }
+        return wasHitting != isHitting;
+    }
+
+    private android.graphics.Point getScreenCenter() {
+        View vw = findViewById(android.R.id.content);
+        return new android.graphics.Point(vw.getWidth()/2, vw.getHeight()/2);
+    }
 }
