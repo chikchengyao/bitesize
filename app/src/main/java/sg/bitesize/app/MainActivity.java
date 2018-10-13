@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
@@ -36,15 +37,12 @@ import com.google.ar.core.Plane;
 import com.google.ar.core.Trackable;
 import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.AnchorNode;
-import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
-import sg.bitesize.app.R;
 
 /**
  * This is an example activity that uses the Sceneform UX package to make common AR tasks easier.
@@ -58,7 +56,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean isTracking;
     private boolean isHitting;
     private FloatingActionButton addButton;
-    private ModelRenderable foodRenderable;
+
+    private ModelRenderable bigBurgerRenderable;
+    private ModelRenderable smallBurgerRenderable;
     private ModelRenderable targetArrowRenderable;
 
     FloatingActionButton portion_button_add, portion_button_remove;
@@ -100,7 +100,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
-        buildRenderable("burger.sfb").thenAccept(renderable -> foodRenderable = renderable);
+        buildRenderable("burger.sfb").thenAccept(renderable -> bigBurgerRenderable = renderable);
+        buildRenderable("single-patty-burger.sfb").thenAccept(renderable -> smallBurgerRenderable = renderable);
         buildRenderable("arrow.sfb").thenAccept(renderable -> targetArrowRenderable = renderable);
 
         arFragment.getArSceneView().getScene().addOnUpdateListener(frameTime -> {
@@ -111,14 +112,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void renderFoodModel() {
+    private static int renders = 0;
+    private void renderModel(ModelRenderable renderable) {
+        showToast("" + ++renders);
         Frame frame = arFragment.getArSceneView().getArFrame();
         android.graphics.Point pt = getScreenCenter();
         List<HitResult> hits;
         if (frame != null) {
             hits = frame.hitTest(pt.x, pt.y);
             for (HitResult hit : hits) {
-                renderModel(hit, foodRenderable);
+                renderModel(hit, renderable);
                 break;
             }
         }
@@ -276,5 +279,13 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    public void renderBigBurger(View view) {
+        renderModel(bigBurgerRenderable);
+    }
+
+    public void renderSmallBurger(View view) {
+        renderModel(smallBurgerRenderable);
     }
 }
