@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
   private boolean isHitting;
   private FloatingActionButton addButton;
   private ModelRenderable andyRenderable;
-  private PointerDrawable pointer = new PointerDrawable();
 
   @Override
   @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
@@ -137,64 +136,14 @@ public class MainActivity extends AppCompatActivity {
 
     arFragment.getArSceneView().getScene().addOnUpdateListener(frameTime -> {
         arFragment.onUpdate(frameTime);
-        onUpdate();
+        updateTracking();
+        updateHitTest();
     });
   }
 
   protected void onResume(){
       super.onResume();
-
       Util.showSplashScreen(this);
-  }
-
-  /**
-   * Returns false and displays an error message if Sceneform can not run, true if Sceneform can run
-   * on this device.
-   *
-   * <p>Sceneform requires Android N on the device as well as OpenGL 3.0 capabilities.
-   *
-   * <p>Finishes the activity if Sceneform can not run
-   */
-  public static boolean checkIsSupportedDeviceOrFinish(final Activity activity) {
-    if (Build.VERSION.SDK_INT < VERSION_CODES.N) {
-      Log.e(TAG, "Sceneform requires Android N or later");
-      Toast.makeText(activity, "Sceneform requires Android N or later", Toast.LENGTH_LONG).show();
-      activity.finish();
-      return false;
-    }
-    String openGlVersionString =
-        ((ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE))
-            .getDeviceConfigurationInfo()
-            .getGlEsVersion();
-    if (Double.parseDouble(openGlVersionString) < MIN_OPENGL_VERSION) {
-      Log.e(TAG, "Sceneform requires OpenGL ES 3.0 later");
-      Toast.makeText(activity, "Sceneform requires OpenGL ES 3.0 or later", Toast.LENGTH_LONG)
-          .show();
-      activity.finish();
-      return false;
-    }
-    return true;
-  }
-
-   private void onUpdate() {
-      boolean trackingChanged = updateTracking();
-      View contentView = findViewById(android.R.id.content);
-      if (trackingChanged) {
-          if (isTracking) {
-              contentView.getOverlay().add(pointer);
-          } else {
-              contentView.getOverlay().remove(pointer);
-          }
-          contentView.invalidate();
-      }
-
-      if (isTracking) {
-          boolean hitTestChanged = updateHitTest();
-          if (hitTestChanged) {
-              pointer.setEnabled(isHitting);
-              contentView.invalidate();
-          }
-      }
   }
 
   private boolean updateTracking() {
@@ -227,5 +176,34 @@ public class MainActivity extends AppCompatActivity {
     private android.graphics.Point getScreenCenter() {
         View vw = findViewById(android.R.id.content);
         return new android.graphics.Point(vw.getWidth()/2, vw.getHeight()/2);
+    }
+
+    /**
+     * Returns false and displays an error message if Sceneform can not run, true if Sceneform can run
+     * on this device.
+     *
+     * <p>Sceneform requires Android N on the device as well as OpenGL 3.0 capabilities.
+     *
+     * <p>Finishes the activity if Sceneform can not run
+     */
+    private static boolean checkIsSupportedDeviceOrFinish(final Activity activity) {
+        if (Build.VERSION.SDK_INT < VERSION_CODES.N) {
+            Log.e(TAG, "Sceneform requires Android N or later");
+            Toast.makeText(activity, "Sceneform requires Android N or later", Toast.LENGTH_LONG).show();
+            activity.finish();
+            return false;
+        }
+        String openGlVersionString =
+                ((ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE))
+                        .getDeviceConfigurationInfo()
+                        .getGlEsVersion();
+        if (Double.parseDouble(openGlVersionString) < MIN_OPENGL_VERSION) {
+            Log.e(TAG, "Sceneform requires OpenGL ES 3.0 later");
+            Toast.makeText(activity, "Sceneform requires OpenGL ES 3.0 or later", Toast.LENGTH_LONG)
+                    .show();
+            activity.finish();
+            return false;
+        }
+        return true;
     }
 }
