@@ -10,6 +10,7 @@ class Util {
 
     static void showSplashScreen(Activity activity){
         View splashScreen = activity.findViewById(R.id.splash_screen_layout);
+            splashScreen.setElevation(1000);
 
         if (!isFirstStartup) {
             splashScreen.setVisibility(View.GONE);
@@ -19,7 +20,7 @@ class Util {
         //isFirstStartup = false;
 
         Animation fadeSplashScreen = AnimationUtils.loadAnimation(activity, R.anim.fade_out);
-        fadeSplashScreen.setStartOffset(500);
+        fadeSplashScreen.setStartOffset(5000);
         fadeSplashScreen.setDuration(500);
 
         fadeSplashScreen.setAnimationListener(new Animation.AnimationListener() {

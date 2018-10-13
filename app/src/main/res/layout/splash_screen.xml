@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/splash_screen_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -9,6 +9,17 @@
         android:id="@+id/splash_screen_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/pastelBlue" />
+        android:background="@color/White" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:maxWidth="100dp"
+        android:maxHeight="100dp"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/splashscreen_logo" />
+
 
 </RelativeLayout>
