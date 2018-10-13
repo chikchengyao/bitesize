@@ -77,16 +77,10 @@ public class MainActivity extends AppCompatActivity {
     addButton = findViewById(R.id.add_button);
     addButton.setOnClickListener((View view) -> {
         Log.i("APP: addButton_OnClick", String.format("isTracking: %s; isHitting: %s", isTracking, isHitting));
-        Frame frame = arFragment.getArSceneView().getArFrame();
-        android.graphics.Point pt = getScreenCenter();
-        List<HitResult> hits;
-        if (frame != null) {
-            hits = frame.hitTest(pt.x, pt.y);
-            for (HitResult hit : hits) {
-                renderModel(hit, foodRenderable);
-                break;
-            }
-        }
+
+        renderFoodModel();
+        openOrderMenu();
+
     });
 
     portion_button_add = (FloatingActionButton)findViewById(R.id.portion_button_add);
@@ -112,7 +106,24 @@ public class MainActivity extends AppCompatActivity {
     });
   }
 
-  protected void onResume(){
+    private void renderFoodModel() {
+        Frame frame = arFragment.getArSceneView().getArFrame();
+        android.graphics.Point pt = getScreenCenter();
+        List<HitResult> hits;
+        if (frame != null) {
+            hits = frame.hitTest(pt.x, pt.y);
+            for (HitResult hit : hits) {
+                renderModel(hit, foodRenderable);
+                break;
+            }
+        }
+    }
+
+    private void openOrderMenu() {
+        //View orderMenu = findViewById(R.id.)
+    }
+
+    protected void onResume(){
       super.onResume();
       Util.showSplashScreen(this);
   }
