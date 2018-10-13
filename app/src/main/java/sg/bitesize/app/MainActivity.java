@@ -21,19 +21,21 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 import com.google.ar.core.Anchor;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
 import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.rendering.ModelRenderable;
-import sg.bitesize.app.R;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
+import sg.bitesize.app.R;
 
 /**
  * This is an example activity that uses the Sceneform UX package to make common AR tasks easier.
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
   private static final String TAG = MainActivity.class.getSimpleName();
   private static final double MIN_OPENGL_VERSION = 3.0;
 
+  private FloatingActionButton addButton;
   private ArFragment arFragment;
   private ModelRenderable andyRenderable;
 
@@ -58,6 +61,14 @@ public class MainActivity extends AppCompatActivity {
 
     setContentView(R.layout.activity_ux);
     arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
+    addButton = findViewById(R.id.add_button);
+
+    addButton.setOnClickListener((View view) -> {
+            Toast toast = Toast.makeText(getApplicationContext(), "Opening the menu...", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.BOTTOM, 0, 0);
+            toast.show();
+        }
+    );
 
     // When you build a Renderable, Sceneform loads its resources in the background while returning
     // a CompletableFuture. Call thenAccept(), handle(), or check isDone() before calling get().
