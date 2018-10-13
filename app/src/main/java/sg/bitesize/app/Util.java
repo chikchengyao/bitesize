@@ -8,9 +8,9 @@ import android.view.animation.AnimationUtils;
 class Util {
     private static boolean isFirstStartup = true;
 
-    static void showSplashScreen(Activity activity){
+    static void showSplashScreen(Activity activity) {
         View splashScreen = activity.findViewById(R.id.splash_screen_layout);
-            splashScreen.setElevation(1000);
+        splashScreen.setElevation(1000);
 
         if (!isFirstStartup) {
             splashScreen.setVisibility(View.GONE);
