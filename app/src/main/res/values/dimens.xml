@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="order_menu_margin">20dp</dimen>
+    <dimen name="order_menu_margin_bottom">50dp</dimen>
+    <dimen name="order_menu_padding">20dp</dimen>
+    <dimen name="order_menu_item_padding">10dp</dimen>
+</resources>

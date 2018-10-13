@@ -64,6 +64,8 @@
       android:layout_margin="24dp"
       android:scaleType="center" />
 
+    <include layout="@layout/order_menu" />
+
     <include layout="@layout/splash_screen" />
 
 </RelativeLayout>

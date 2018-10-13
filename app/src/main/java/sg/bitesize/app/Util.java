@@ -10,6 +10,7 @@ class Util {
 
     static void showSplashScreen(Activity activity){
         View splashScreen = activity.findViewById(R.id.splash_screen_layout);
+            splashScreen.setElevation(1000);
 
         if (!isFirstStartup) {
             splashScreen.setVisibility(View.GONE);
