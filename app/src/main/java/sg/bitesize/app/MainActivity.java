@@ -21,19 +21,25 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 import com.google.ar.core.Anchor;
+import com.google.ar.core.Frame;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
+import com.google.ar.core.Trackable;
+import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.rendering.ModelRenderable;
-import sg.bitesize.app.R;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
+import java.util.List;
+import sg.bitesize.app.R;
 
 /**
  * This is an example activity that uses the Sceneform UX package to make common AR tasks easier.
@@ -43,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
   private static final double MIN_OPENGL_VERSION = 3.0;
 
   private ArFragment arFragment;
+  private boolean isTracking;
+  private boolean isHitting;
+  private FloatingActionButton addButton;
   private ModelRenderable andyRenderable;
 
   @Override
@@ -58,6 +67,21 @@ public class MainActivity extends AppCompatActivity {
 
     setContentView(R.layout.activity_ux);
     arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
+    addButton = findViewById(R.id.add_button);
+
+    addButton.setOnClickListener((View view) -> {
+        Log.i("APP: addButton_OnClick", String.format("isTracking: %s; isHitting: %s", isTracking, isHitting));
+        Frame frame = arFragment.getArSceneView().getArFrame();
+        android.graphics.Point pt = getScreenCenter();
+        List<HitResult> hits;
+        if (frame != null) {
+            hits = frame.hitTest(pt.x, pt.y);
+            for (HitResult hit : hits) {
+                renderModel(hit, andyRenderable);
+                break;
+            }
+        }
+    });
 
     // When you build a Renderable, Sceneform loads its resources in the background while returning
     // a CompletableFuture. Call thenAccept(), handle(), or check isDone() before calling get().
@@ -74,30 +98,76 @@ public class MainActivity extends AppCompatActivity {
               return null;
             });
 
-    arFragment.setOnTapArPlaneListener(
-        (HitResult hitResult, Plane plane, MotionEvent motionEvent) -> {
-          if (andyRenderable == null) {
-            return;
-          }
-
-          // Create the Anchor.
-          Anchor anchor = hitResult.createAnchor();
-          AnchorNode anchorNode = new AnchorNode(anchor);
-          anchorNode.setParent(arFragment.getArSceneView().getScene());
-
-          // Create the transformable andy and add it to the anchor.
-          TransformableNode andy = new TransformableNode(arFragment.getTransformationSystem());
-          andy.getScaleController().setSensitivity(0);  // disable pinch-and-scale
-          andy.setParent(anchorNode);
-          andy.setRenderable(andyRenderable);
-          andy.select();
-        });
+    arFragment.getArSceneView().getScene().addOnUpdateListener(frameTime -> {
+        arFragment.onUpdate(frameTime);
+        updateTracking();
+        updateHitTest();
+    });
   }
 
   protected void onResume(){
       super.onResume();
-
       Util.showSplashScreen(this);
+  }
+
+  /**
+   * Renders a ModelRenderable model on a HitResult.
+   */
+  private void renderModel(HitResult hitResult, ModelRenderable model) {
+      Anchor anchor = hitResult.createAnchor();
+      AnchorNode anchorNode = new AnchorNode(anchor);
+      anchorNode.setParent(arFragment.getArSceneView().getScene());
+
+      // Create the transformable andy and add it to the anchor.
+      TransformableNode andy = new TransformableNode(arFragment.getTransformationSystem());
+      andy.getScaleController().setSensitivity(0);  // disable pinch-and-scale
+      andy.setParent(anchorNode);
+      andy.setRenderable(andyRenderable);
+      andy.select();
+  }
+
+  /**
+   * Updates the value of isTracking. isTracking is something like whether or not a plane has been
+   * detected and is currently being tracked by sceneform.
+   */
+  private boolean updateTracking() {
+      Frame frame = arFragment.getArSceneView().getArFrame();
+      boolean wasTracking = isTracking;
+      isTracking = frame != null && frame.getCamera().getTrackingState() == TrackingState.TRACKING;
+      return isTracking != wasTracking;
+  }
+
+  /**
+   * Updates the value of isHitting. isHitting is something like whether or not the current center
+   * of the screen lies on a plane that is tracked.
+   */
+  private boolean updateHitTest() {
+      Frame frame = arFragment.getArSceneView().getArFrame();
+      android.graphics.Point pt = getScreenCenter();
+      List<HitResult> hits;
+      boolean wasHitting = isHitting;
+      isHitting = false;
+      if (frame != null) {
+          hits = frame.hitTest(pt.x, pt.y);
+          for (HitResult hit : hits) {
+              Trackable trackable = hit.getTrackable();
+              if (trackable instanceof Plane &&
+                      ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
+                  isHitting = true;
+                  break;
+              }
+          }
+      }
+      return wasHitting != isHitting;
+  }
+
+  /**
+   * Returns the current center of the screen. Used in the onClick of addButton to figure out
+   * where the new model should be spawned.
+   */
+  private android.graphics.Point getScreenCenter() {
+      View vw = findViewById(android.R.id.content);
+      return new android.graphics.Point(vw.getWidth()/2, vw.getHeight()/2);
   }
 
   /**
@@ -108,24 +178,24 @@ public class MainActivity extends AppCompatActivity {
    *
    * <p>Finishes the activity if Sceneform can not run
    */
-  public static boolean checkIsSupportedDeviceOrFinish(final Activity activity) {
-    if (Build.VERSION.SDK_INT < VERSION_CODES.N) {
-      Log.e(TAG, "Sceneform requires Android N or later");
-      Toast.makeText(activity, "Sceneform requires Android N or later", Toast.LENGTH_LONG).show();
-      activity.finish();
-      return false;
-    }
-    String openGlVersionString =
-        ((ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE))
-            .getDeviceConfigurationInfo()
-            .getGlEsVersion();
-    if (Double.parseDouble(openGlVersionString) < MIN_OPENGL_VERSION) {
-      Log.e(TAG, "Sceneform requires OpenGL ES 3.0 later");
-      Toast.makeText(activity, "Sceneform requires OpenGL ES 3.0 or later", Toast.LENGTH_LONG)
-          .show();
-      activity.finish();
-      return false;
-    }
-    return true;
+  private static boolean checkIsSupportedDeviceOrFinish(final Activity activity) {
+      if (Build.VERSION.SDK_INT < VERSION_CODES.N) {
+          Log.e(TAG, "Sceneform requires Android N or later");
+          Toast.makeText(activity, "Sceneform requires Android N or later", Toast.LENGTH_LONG).show();
+          activity.finish();
+          return false;
+      }
+      String openGlVersionString =
+              ((ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE))
+                      .getDeviceConfigurationInfo()
+                      .getGlEsVersion();
+      if (Double.parseDouble(openGlVersionString) < MIN_OPENGL_VERSION) {
+          Log.e(TAG, "Sceneform requires OpenGL ES 3.0 later");
+          Toast.makeText(activity, "Sceneform requires OpenGL ES 3.0 or later", Toast.LENGTH_LONG)
+                  .show();
+          activity.finish();
+          return false;
+      }
+      return true;
   }
 }
