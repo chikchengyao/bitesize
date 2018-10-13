@@ -22,6 +22,7 @@ import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
   private FloatingActionButton addButton;
   private ModelRenderable andyRenderable;
 
+  FloatingActionButton portion_button_add, portion_button_remove;
+
   @Override
   @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
   // CompletableFuture requires api level 24
@@ -80,6 +83,23 @@ public class MainActivity extends AppCompatActivity {
                 renderModel(hit, andyRenderable);
                 break;
             }
+        }
+    });
+
+    portion_button_add = (FloatingActionButton)findViewById(R.id.portion_button_add);
+    portion_button_add.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Snackbar.make(view, "Increase portion size", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
+    });
+    portion_button_remove = (FloatingActionButton)findViewById(R.id.portion_button_remove);
+    portion_button_remove.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Snackbar.make(view, "Decrease portion size", Snackbar.LENGTH_LONG)
+                      .setAction("Action", null).show();
         }
     });
 
