@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
   /**
    * Renders a ModelRenderable model on a HitResult.
    */
-  private Anchor renderModel(HitResult hitResult, ModelRenderable model) {
+  private Anchor renderModel(HitResult hitResult, ModelRenderable model, boolean should_select) {
       Anchor anchor = hitResult.createAnchor();
       AnchorNode anchorNode = new AnchorNode(anchor);
       anchorNode.setParent(arFragment.getArSceneView().getScene());
@@ -162,9 +162,15 @@ public class MainActivity extends AppCompatActivity {
       node.getScaleController().setSensitivity(0);  // disable pinch-and-scale
       node.setParent(anchorNode);
       node.setRenderable(model);
-      node.select();
+      if (should_select) {
+          node.select();
+      }
 
       return anchor;
+  }
+
+  private Anchor renderModel(HitResult hitResult, ModelRenderable model) {
+      return renderModel(hitResult, model, true);
   }
 
   private void updateTargetArrowNode() {
@@ -178,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
                   if (targetArrowAnchor != null) {
                       targetArrowAnchor.detach();
                   }
-                  targetArrowAnchor = renderModel(hit, targetArrowRenderable);
+                  targetArrowAnchor = renderModel(hit, targetArrowRenderable, false);
                   break;
               }
           }
