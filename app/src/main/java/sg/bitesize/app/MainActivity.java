@@ -41,6 +41,8 @@ import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 import sg.bitesize.app.R;
 
 /**
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
   private boolean isHitting;
   private FloatingActionButton addButton;
   private ModelRenderable foodRenderable;
+  private ModelRenderable targetArrowRenderable;
 
   FloatingActionButton portion_button_add, portion_button_remove;
 
@@ -70,9 +73,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     setContentView(R.layout.activity_ux);
-    arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
-    addButton = findViewById(R.id.add_button);
 
+    addButton = findViewById(R.id.add_button);
     addButton.setOnClickListener((View view) -> {
         Log.i("APP: addButton_OnClick", String.format("isTracking: %s; isHitting: %s", isTracking, isHitting));
         Frame frame = arFragment.getArSceneView().getArFrame();
@@ -92,21 +94,16 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) { showToast("Increase portion size"); }
     });
+
     portion_button_remove = (FloatingActionButton)findViewById(R.id.portion_button_remove);
     portion_button_remove.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) { showToast("Decrease portion size"); }
     });
 
-   ModelRenderable.builder()
-           .setSource(this, Uri.parse("burger.sfb"))
-           .build()
-           .thenAccept(renderable -> foodRenderable = renderable)
-           .exceptionally(
-                   throwable -> {
-                       showToast("Unable to load food model");
-                       return null;
-                   });
+    arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
+    buildRenderable("burger.sfb").thenAccept(renderable -> foodRenderable = renderable);
+    buildRenderable("arrow.sfb").thenAccept(renderable -> targetArrowRenderable = renderable);
 
     arFragment.getArSceneView().getScene().addOnUpdateListener(frameTime -> {
         arFragment.onUpdate(frameTime);
@@ -120,6 +117,17 @@ public class MainActivity extends AppCompatActivity {
       Util.showSplashScreen(this);
   }
 
+  private CompletableFuture<ModelRenderable> buildRenderable(String uri) {
+      return ModelRenderable.builder()
+          .setSource(this, Uri.parse("burger.sfb"))
+          .build()
+          .exceptionally(
+                  throwable -> {
+                      showToast("Unable to load food model");
+                      return null;
+                  });
+  }
+
   /**
    * Renders a toast of LENGTH_LONG at the bottom center of the screen
    */
@@ -127,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
       Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
       toast.setGravity(Gravity.CENTER, 0, 0);
       toast.show();
-
   }
 
   /**
