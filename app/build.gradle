@@ -82,3 +82,9 @@ sceneform.asset('sampledata/models/andy.obj',
         'sampledata/models/andy.sfa',
         'src/main/res/raw/andy')
 
+
+
+sceneform.asset('sampledata/burger-obj/burger.obj',
+        'default',
+        'sampledata/burger-obj/burger.sfa',
+        'src/main/assets/burger')
