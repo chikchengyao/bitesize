@@ -41,6 +41,7 @@ import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import sg.bitesize.app.R;
 
 /**
  * This is an example activity that uses the Sceneform UX package to make common AR tasks easier.
