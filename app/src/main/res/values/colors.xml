@@ -3,6 +3,8 @@
 <resources>
     <color name="Black">#000000</color>
     <color name="White">#FFFFFF</color>
+    <color name="translucentWhite">#AAFFFFFF</color>
+>>>>>>> b57e2f14da1407134d06b71b70a97c100797e548
 
     <color name="pastelRed">#f38181</color>
     <color name="pastelYellow">#fce38a</color>
