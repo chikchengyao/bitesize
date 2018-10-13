@@ -37,6 +37,7 @@ import com.google.ar.core.Plane;
 import com.google.ar.core.Trackable;
 import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.AnchorNode;
+import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
   private static final double MIN_OPENGL_VERSION = 3.0;
 
   private ArFragment arFragment;
+  private Anchor targetArrowAnchor;
   private boolean isTracking;
   private boolean isHitting;
   private FloatingActionButton addButton;
@@ -77,16 +79,8 @@ public class MainActivity extends AppCompatActivity {
     addButton = findViewById(R.id.add_button);
     addButton.setOnClickListener((View view) -> {
         Log.i("APP: addButton_OnClick", String.format("isTracking: %s; isHitting: %s", isTracking, isHitting));
-        Frame frame = arFragment.getArSceneView().getArFrame();
-        android.graphics.Point pt = getScreenCenter();
-        List<HitResult> hits;
-        if (frame != null) {
-            hits = frame.hitTest(pt.x, pt.y);
-            for (HitResult hit : hits) {
-                renderModel(hit, foodRenderable);
-                break;
-            }
-        }
+        renderFoodModel();
+        openOrderMenu();
     });
 
     portion_button_add = (FloatingActionButton)findViewById(R.id.portion_button_add);
@@ -109,17 +103,35 @@ public class MainActivity extends AppCompatActivity {
         arFragment.onUpdate(frameTime);
         updateTracking();
         updateHitTest();
+        updateTargetArrowNode();
     });
   }
 
-  protected void onResume(){
+    private void renderFoodModel() {
+        Frame frame = arFragment.getArSceneView().getArFrame();
+        android.graphics.Point pt = getScreenCenter();
+        List<HitResult> hits;
+        if (frame != null) {
+            hits = frame.hitTest(pt.x, pt.y);
+            for (HitResult hit : hits) {
+                renderModel(hit, foodRenderable);
+                break;
+            }
+        }
+    }
+
+    private void openOrderMenu() {
+        //View orderMenu = findViewById(R.id.)
+    }
+
+    protected void onResume(){
       super.onResume();
       Util.showSplashScreen(this);
   }
 
   private CompletableFuture<ModelRenderable> buildRenderable(String uri) {
       return ModelRenderable.builder()
-          .setSource(this, Uri.parse("burger.sfb"))
+          .setSource(this, Uri.parse(uri))
           .build()
           .exceptionally(
                   throwable -> {
@@ -133,14 +145,14 @@ public class MainActivity extends AppCompatActivity {
    */
   private void showToast(String message) {
       Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
-      toast.setGravity(Gravity.CENTER, 0, 0);
+      toast.setGravity(Gravity.BOTTOM, 0, 0);
       toast.show();
   }
 
   /**
    * Renders a ModelRenderable model on a HitResult.
    */
-  private void renderModel(HitResult hitResult, ModelRenderable model) {
+  private Anchor renderModel(HitResult hitResult, ModelRenderable model, boolean should_select) {
       Anchor anchor = hitResult.createAnchor();
       AnchorNode anchorNode = new AnchorNode(anchor);
       anchorNode.setParent(arFragment.getArSceneView().getScene());
@@ -150,7 +162,33 @@ public class MainActivity extends AppCompatActivity {
       node.getScaleController().setSensitivity(0);  // disable pinch-and-scale
       node.setParent(anchorNode);
       node.setRenderable(model);
-      node.select();
+      if (should_select) {
+          node.select();
+      }
+
+      return anchor;
+  }
+
+  private Anchor renderModel(HitResult hitResult, ModelRenderable model) {
+      return renderModel(hitResult, model, true);
+  }
+
+  private void updateTargetArrowNode() {
+      if (isTracking && isHitting) {
+          Frame frame = arFragment.getArSceneView().getArFrame();
+          android.graphics.Point pt = getScreenCenter();
+          List<HitResult> hits;
+          if (frame != null) {
+              hits = frame.hitTest(pt.x, pt.y);
+              for (HitResult hit : hits) {
+                  if (targetArrowAnchor != null) {
+                      targetArrowAnchor.detach();
+                  }
+                  targetArrowAnchor = renderModel(hit, targetArrowRenderable, false);
+                  break;
+              }
+          }
+      }
   }
 
   /**
@@ -167,6 +205,8 @@ public class MainActivity extends AppCompatActivity {
   /**
    * Updates the value of isHitting. isHitting is something like whether or not the current center
    * of the screen lies on a plane that is tracked.
+   *
+   * Also reinstantiates a AnchorNode for the targetArrowNode
    */
   private boolean updateHitTest() {
       Frame frame = arFragment.getArSceneView().getArFrame();
@@ -178,8 +218,7 @@ public class MainActivity extends AppCompatActivity {
           hits = frame.hitTest(pt.x, pt.y);
           for (HitResult hit : hits) {
               Trackable trackable = hit.getTrackable();
-              if (trackable instanceof Plane &&
-                      ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
+              if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
                   isHitting = true;
                   break;
               }
