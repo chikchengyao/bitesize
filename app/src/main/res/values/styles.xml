@@ -15,7 +15,11 @@
 -->
 <resources>
   <style name="AppTheme" parent="Theme.AppCompat.Light">
-    <item name="colorBlack">@color/colorBlack</item>
-    <item name="colorWhite">@color/colorWhite</item>
+      <item name="colorBlack">@color/colorBlack</item>
+      <item name="colorWhite">@color/colorWhite</item>
+      <item name = "pastelRed">@color/pastelRed</item>
+      <item name = "pastelYellow">@color/pastelYellow</item>
+      <item name = "pastelGreen">@color/pastelGreen</item>
+      <item name = "pastelBlue">@color/pastelBlue</item>
   </style>
 </resources>

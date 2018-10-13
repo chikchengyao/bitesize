@@ -3,4 +3,9 @@
 <resources>
     <color name="Black">#000000</color>
     <color name="White">#FFFFFF</color>
+
+    <color name="pastelRed">#f38181</color>
+    <color name="pastelYellow">#fce38a</color>
+    <color name="pastelGreen">#eaffd0</color>
+    <color name="pastelBlue">#95e1d3</color>
 </resources>
