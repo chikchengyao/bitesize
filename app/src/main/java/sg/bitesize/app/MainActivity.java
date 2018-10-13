@@ -70,26 +70,18 @@ public class MainActivity extends AppCompatActivity {
     addButton = findViewById(R.id.add_button);
 
     addButton.setOnClickListener((View view) -> {
-            Toast toast = Toast.makeText(
-                getApplicationContext(),
-                String.format("isTracking: %s; isHitting: %s", isTracking, isHitting),
-                Toast.LENGTH_LONG
-            );
-            toast.setGravity(Gravity.BOTTOM, 0, 0);
-            toast.show();
-
-            Frame frame = arFragment.getArSceneView().getArFrame();
-            android.graphics.Point pt = getScreenCenter();
-            List<HitResult> hits;
-            if (frame != null) {
-                hits = frame.hitTest(pt.x, pt.y);
-                for (HitResult hit : hits) {
-                    renderModel(hit, andyRenderable);
-                    break;
-                }
+        Log.i("APP: addButton_OnClick", String.format("isTracking: %s; isHitting: %s", isTracking, isHitting));
+        Frame frame = arFragment.getArSceneView().getArFrame();
+        android.graphics.Point pt = getScreenCenter();
+        List<HitResult> hits;
+        if (frame != null) {
+            hits = frame.hitTest(pt.x, pt.y);
+            for (HitResult hit : hits) {
+                renderModel(hit, andyRenderable);
+                break;
             }
         }
-    );
+    });
 
     // When you build a Renderable, Sceneform loads its resources in the background while returning
     // a CompletableFuture. Call thenAccept(), handle(), or check isDone() before calling get().
