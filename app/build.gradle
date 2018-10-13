@@ -17,7 +17,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.google.ar.sceneform.samples.hellosceneform"
+        applicationId "sg.bitesize.app"
 
         // AR Optional apps must declare minSdkVersion >= 14.
         // AR Required apps must declare minSdkVersion >= 24.
