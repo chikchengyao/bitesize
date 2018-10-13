@@ -86,6 +86,7 @@ public class HelloSceneformActivity extends AppCompatActivity {
 
           // Create the transformable andy and add it to the anchor.
           TransformableNode andy = new TransformableNode(arFragment.getTransformationSystem());
+          andy.getScaleController().setSensitivity(0);  // disable pinch-and-scale
           andy.setParent(anchorNode);
           andy.setRenderable(andyRenderable);
           andy.select();
