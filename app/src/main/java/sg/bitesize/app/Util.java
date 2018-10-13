@@ -20,7 +20,7 @@ class Util {
         //isFirstStartup = false;
 
         Animation fadeSplashScreen = AnimationUtils.loadAnimation(activity, R.anim.fade_out);
-        fadeSplashScreen.setStartOffset(5000);
+        fadeSplashScreen.setStartOffset(500);
         fadeSplashScreen.setDuration(500);
 
         fadeSplashScreen.setAnimationListener(new Animation.AnimationListener() {
