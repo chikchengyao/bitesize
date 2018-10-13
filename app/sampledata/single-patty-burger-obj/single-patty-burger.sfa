@@ -1,0 +1,157 @@
+{
+  materials: [
+    {
+      name: 'Material 1',
+      parameters: [
+        {
+          baseColorFactor: [
+            1,
+            1,
+            1,
+            1,
+          ],
+        },
+        {
+          baseColor: 'beb893f8-1a95-42d8-a811-be991a43766d',
+        },
+        {
+          diffuseColorFactor: null,
+        },
+        {
+          diffuseColor: null,
+        },
+        {
+          normal: null,
+        },
+        {
+          metallicFactor: 0,
+        },
+        {
+          roughnessFactor: 0.96994800000000003,
+        },
+        {
+          specularFactor: null,
+        },
+        {
+          glossinessFactor: null,
+        },
+        {
+          specularGlossiness: null,
+        },
+        {
+          specularGlossinessCalculation: null,
+        },
+        {
+          metallicRoughness: null,
+        },
+        {
+          occlusion: null,
+        },
+        {
+          emissiveFactor: [
+            0,
+            0,
+            0,
+            1,
+          ],
+        },
+        {
+          emissive: null,
+        },
+        {
+          opacity: null,
+        },
+      ],
+      source: 'build/sceneform_sdk/default_materials/gltf_material.sfm',
+    },
+    {
+      name: 'Material 2',
+      parameters: [
+        {
+          baseColorFactor: [
+            1,
+            1,
+            1,
+            1,
+          ],
+        },
+        {
+          baseColor: '5569ce54-2606-46d2-b204-90e9d699cae6',
+        },
+        {
+          diffuseColorFactor: null,
+        },
+        {
+          diffuseColor: null,
+        },
+        {
+          normal: null,
+        },
+        {
+          metallicFactor: 0,
+        },
+        {
+          roughnessFactor: 0.96994800000000003,
+        },
+        {
+          specularFactor: null,
+        },
+        {
+          glossinessFactor: null,
+        },
+        {
+          specularGlossiness: null,
+        },
+        {
+          specularGlossinessCalculation: null,
+        },
+        {
+          metallicRoughness: null,
+        },
+        {
+          occlusion: null,
+        },
+        {
+          emissiveFactor: [
+            0,
+            0,
+            0,
+            1,
+          ],
+        },
+        {
+          emissive: null,
+        },
+        {
+          opacity: null,
+        },
+      ],
+      source: 'build/sceneform_sdk/default_materials/gltf_material.sfm',
+    },
+  ],
+  model: {
+    attributes: [
+      'Position',
+      'TexCoord',
+      'Orientation',
+    ],
+    collision: {},
+    file: 'sampledata/single-patty-burger-obj/single-patty-burger.gltf',
+    name: 'single-patty-burger',
+    recenter: 'root',
+    scale: 0.26252599999999998,
+  },
+  samplers: [
+    {
+      file: 'sampledata/single-patty-burger-obj/5569ce54-2606-46d2-b204-90e9d699cae6.jpg',
+      name: '5569ce54-2606-46d2-b204-90e9d699cae6',
+      pipeline_name: '5569ce54-2606-46d2-b204-90e9d699cae6.jpg',
+    },
+    {
+      file: 'sampledata/single-patty-burger-obj/beb893f8-1a95-42d8-a811-be991a43766d.jpg',
+      name: 'beb893f8-1a95-42d8-a811-be991a43766d',
+      pipeline_name: 'beb893f8-1a95-42d8-a811-be991a43766d.jpg',
+    },
+  ],
+  version: '0.52:1',
+}

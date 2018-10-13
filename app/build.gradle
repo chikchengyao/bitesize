@@ -88,3 +88,9 @@ sceneform.asset('sampledata/burger-obj/burger.obj',
         'default',
         'sampledata/burger-obj/burger.sfa',
         'src/main/assets/burger')
+
+
+sceneform.asset('sampledata/single-patty-burger-obj/single-patty-burger.gltf',
+        'default',
+        'sampledata/single-patty-burger-obj/single-patty-burger.sfa',
+        'src/main/assets/single-patty-burger')
