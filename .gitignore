@@ -11,3 +11,5 @@ local.properties
 #
 # # OS configurations.
 .DS_Store
+## To not mutate andy.sfb causes runtime error.
+app/src/res/raw/andy.sfb
