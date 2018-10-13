@@ -94,6 +94,12 @@ public class MainActivity extends AppCompatActivity {
         });
   }
 
+  protected void onResume(){
+      super.onResume();
+
+      Util.showSplashScreen(this);
+  }
+
   /**
    * Returns false and displays an error message if Sceneform can not run, true if Sceneform can run
    * on this device.
