@@ -78,6 +78,26 @@ public class MainActivity extends AppCompatActivity {
             );
             toast.setGravity(Gravity.BOTTOM, 0, 0);
             toast.show();
+
+            Frame frame = arFragment.getArSceneView().getArFrame();
+            android.graphics.Point pt = getScreenCenter();
+            List<HitResult> hits;
+            if (frame != null) {
+                hits = frame.hitTest(pt.x, pt.y);
+                for (HitResult hit : hits) {
+                    Anchor anchor = hit.createAnchor();
+                    AnchorNode anchorNode = new AnchorNode(anchor);
+                    anchorNode.setParent(arFragment.getArSceneView().getScene());
+
+                    // Create the transformable andy and add it to the anchor.
+                    TransformableNode andy = new TransformableNode(arFragment.getTransformationSystem());
+                    andy.getScaleController().setSensitivity(0);  // disable pinch-and-scale
+                    andy.setParent(anchorNode);
+                    andy.setRenderable(andyRenderable);
+                    andy.select();
+                    break;
+                }
+            }
         }
     );
 
