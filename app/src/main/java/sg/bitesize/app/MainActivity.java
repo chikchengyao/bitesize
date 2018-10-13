@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
   private boolean isTracking;
   private boolean isHitting;
   private FloatingActionButton addButton;
-  private ModelRenderable andyRenderable;
+  private ModelRenderable foodRenderable;
 
   FloatingActionButton portion_button_add, portion_button_remove;
 
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         if (frame != null) {
             hits = frame.hitTest(pt.x, pt.y);
             for (HitResult hit : hits) {
-                renderModel(hit, andyRenderable);
+                renderModel(hit, foodRenderable);
                 break;
             }
         }
@@ -90,32 +90,23 @@ public class MainActivity extends AppCompatActivity {
     portion_button_add = (FloatingActionButton)findViewById(R.id.portion_button_add);
     portion_button_add.setOnClickListener(new View.OnClickListener() {
         @Override
-        public void onClick(View view) {
-            Snackbar.make(view, "Increase portion size", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-        }
+        public void onClick(View view) { showToast("Increase portion size"); }
     });
     portion_button_remove = (FloatingActionButton)findViewById(R.id.portion_button_remove);
     portion_button_remove.setOnClickListener(new View.OnClickListener() {
         @Override
-        public void onClick(View view) {
-            Snackbar.make(view, "Decrease portion size", Snackbar.LENGTH_LONG)
-                      .setAction("Action", null).show();
-        }
+        public void onClick(View view) { showToast("Decrease portion size"); }
     });
 
-      ModelRenderable.builder()
-              .setSource(this, Uri.parse("burger.sfb"))
-              .build()
-              .thenAccept(renderable -> andyRenderable = renderable)
-              .exceptionally(
-                      throwable -> {
-                          Toast toast =
-                                  Toast.makeText(this, "Unable to load andy renderable", Toast.LENGTH_LONG);
-                          toast.setGravity(Gravity.CENTER, 0, 0);
-                          toast.show();
-                          return null;
-                      });
+   ModelRenderable.builder()
+           .setSource(this, Uri.parse("burger.sfb"))
+           .build()
+           .thenAccept(renderable -> foodRenderable = renderable)
+           .exceptionally(
+                   throwable -> {
+                       showToast("Unable to load food model");
+                       return null;
+                   });
 
     arFragment.getArSceneView().getScene().addOnUpdateListener(frameTime -> {
         arFragment.onUpdate(frameTime);
@@ -130,6 +121,16 @@ public class MainActivity extends AppCompatActivity {
   }
 
   /**
+   * Renders a toast of LENGTH_LONG at the bottom center of the screen
+   */
+  private void showToast(String message) {
+      Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+      toast.setGravity(Gravity.CENTER, 0, 0);
+      toast.show();
+
+  }
+
+  /**
    * Renders a ModelRenderable model on a HitResult.
    */
   private void renderModel(HitResult hitResult, ModelRenderable model) {
@@ -137,12 +138,12 @@ public class MainActivity extends AppCompatActivity {
       AnchorNode anchorNode = new AnchorNode(anchor);
       anchorNode.setParent(arFragment.getArSceneView().getScene());
 
-      // Create the transformable andy and add it to the anchor.
-      TransformableNode andy = new TransformableNode(arFragment.getTransformationSystem());
-      andy.getScaleController().setSensitivity(0);  // disable pinch-and-scale
-      andy.setParent(anchorNode);
-      andy.setRenderable(andyRenderable);
-      andy.select();
+      // Create the transformable node and add it to the anchor.
+      TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
+      node.getScaleController().setSensitivity(0);  // disable pinch-and-scale
+      node.setParent(anchorNode);
+      node.setRenderable(model);
+      node.select();
   }
 
   /**
