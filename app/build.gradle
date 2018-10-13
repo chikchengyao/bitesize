@@ -94,3 +94,9 @@ sceneform.asset('sampledata/single-patty-burger-obj/single-patty-burger.gltf',
         'default',
         'sampledata/single-patty-burger-obj/single-patty-burger.sfa',
         'src/main/assets/single-patty-burger')
+
+
+sceneform.asset('sampledata/arrow/arrow.gltf',
+        'default',
+        'sampledata/arrow/arrow.sfa',
+        'src/main/assets/arrow')
