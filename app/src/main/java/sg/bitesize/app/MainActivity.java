@@ -86,11 +86,13 @@ public class MainActivity extends AppCompatActivity {
             toggleOrderMenu();
         });
 
+        Food lastTouched = new DoubleBurger(this);
         portion_button_add = (FloatingActionButton) findViewById(R.id.portion_button_add);
         portion_button_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showToast("Increase portion size");
+                renderFood(lastTouched);
             }
         });
 
@@ -99,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showToast("Decrease portion size");
+                lastTouched.swap(MainActivity.this, new ChickenRice(MainActivity.this, 1,1,1));
             }
         });
 
@@ -210,6 +213,8 @@ public class MainActivity extends AppCompatActivity {
         AnchorNode anchorNode = new AnchorNode(anchor);
         anchorNode.setParent(arFragment.getArSceneView().getScene());
 
+        food.anchorNode = anchorNode;
+
         // Create the transformable node and add it to the anchor.
         TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
         node.getScaleController().setSensitivity(0);  // disable pinch-and-scale
@@ -220,6 +225,8 @@ public class MainActivity extends AppCompatActivity {
         if (should_select) {
             node.select();
         }
+
+        food.transformableNode = node;
 
         return anchor;
     }
