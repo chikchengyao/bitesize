@@ -37,7 +37,7 @@
     file: 'sampledata/burger-obj-medium/burger-medium.obj',
     name: 'burger-medium',
     recenter: 'root',
-    scale: 0.0004,
+    scale: 0.004,
   },
   samplers: [
     {

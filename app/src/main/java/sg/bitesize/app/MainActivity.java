@@ -59,9 +59,8 @@ public class MainActivity extends AppCompatActivity {
   private ModelRenderable burgerSmall;
   private ModelRenderable burgerMedium;
   private ModelRenderable burgerLarge;
+  private ModelRenderable singlePatty;
   private TransformableNode lastTouchedFood;
-  private AnchorNode lastTouchedAnchorNode;
-  private Anchor lastTouchedAnchor;
   private int currSize; // 0 if small, 1 if medium and 3 if large.
   private HashMap<TransformableNode, AnchorNode> nodeMap = new HashMap<>();
 
@@ -99,26 +98,33 @@ public class MainActivity extends AppCompatActivity {
     portion_button_add.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Anchor newAnchor = nodeMap.get(lastTouchedFood).getAnchor();
             if (currSize == 0) { // Render a medium sized image.
-                AnchorNode anchorNode = new AnchorNode(nodeMap.get(lastTouchedFood).getAnchor());
-                anchorNode.setParent(arFragment.getArSceneView().getScene());
+                AnchorNode oldAnchorNode = nodeMap.get(lastTouchedFood);
+                nodeMap.get(lastTouchedFood).removeChild(lastTouchedFood);
+                nodeMap.remove(lastTouchedFood);
                 TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
                 node.getScaleController().setSensitivity(0);  // disable pinch-and-scale
-                node.setParent(anchorNode);
-                node.setRenderable(burgerMedium);
+                node.setParent(oldAnchorNode);
+                node.setRenderable(singlePatty);
                 node.select();
-                //nodeMap.get(lastTouchedFood).getAnchor().detach();
+                node.setOnTapListener((v, event) -> {
+                    lastTouchedFood = node;
+                });
+                nodeMap.put(node, oldAnchorNode);
                 currSize++;
             } else if (currSize == 1) { // Render a large sized image.
-                AnchorNode anchorNode = new AnchorNode(nodeMap.get(lastTouchedFood).getAnchor());
-                anchorNode.setParent(arFragment.getArSceneView().getScene());
+                AnchorNode oldAnchorNode = nodeMap.get(lastTouchedFood);
+                nodeMap.get(lastTouchedFood).removeChild(lastTouchedFood);
+                nodeMap.remove(lastTouchedFood);
                 TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
                 node.getScaleController().setSensitivity(0);  // disable pinch-and-scale
-                node.setParent(anchorNode);
-                node.setRenderable(burgerLarge);
+                node.setParent(oldAnchorNode);
+                node.setRenderable(singlePatty);
                 node.select();
-                //nodeMap.get(lastTouchedFood).getAnchor().detach();
+                node.setOnTapListener((v, event) -> {
+                    lastTouchedFood = node;
+                });
+                nodeMap.put(node, oldAnchorNode);
                 currSize++;
             } else if (currSize == 2) { // Do nothing.
                 return;
@@ -163,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
     buildRenderable("burger-medium.sfb").thenAccept(renderable -> burgerMedium = renderable);
     buildRenderable("burger-large.sfb").thenAccept(renderable -> burgerLarge = renderable);
     buildRenderable("arrow.sfb").thenAccept(renderable -> targetArrowRenderable = renderable);
+    buildRenderable("single-patty-burger.sfb").thenAccept(renderable -> singlePatty = renderable);
 
     arFragment.getArSceneView().getScene().addOnUpdateListener(frameTime -> {
         arFragment.onUpdate(frameTime);
@@ -203,9 +210,6 @@ public class MainActivity extends AppCompatActivity {
       Anchor anchor = hitResult.createAnchor();
       AnchorNode anchorNode = new AnchorNode(anchor);
       anchorNode.setParent(arFragment.getArSceneView().getScene());
-      anchorNode.setOnTapListener((v, event) -> {
-          lastTouchedAnchorNode = anchorNode;
-      });
 
       // Create the transformable node and add it to the anchor.
       TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
