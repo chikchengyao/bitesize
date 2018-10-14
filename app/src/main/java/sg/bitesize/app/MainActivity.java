@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
@@ -36,15 +37,13 @@ import com.google.ar.core.Plane;
 import com.google.ar.core.Trackable;
 import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.AnchorNode;
-import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
+import com.google.ar.sceneform.rendering.Renderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
-import sg.bitesize.app.R;
 
 /**
  * This is an example activity that uses the Sceneform UX package to make common AR tasks easier.
@@ -60,7 +59,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean isOrderMenuVisible = false;
     private boolean isCheckoutVisible = false;
     private FloatingActionButton addButton;
-    private ModelRenderable foodRenderable;
+
+    private ModelRenderable bigBurgerRenderable;
+    private ModelRenderable smallBurgerRenderable;
     private ModelRenderable targetArrowRenderable;
 
     FloatingActionButton portion_button_add, portion_button_remove;
@@ -102,8 +103,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
-        buildRenderable("burger.sfb").thenAccept(renderable -> foodRenderable = renderable);
+        buildRenderable("burger.sfb").thenAccept(renderable -> bigBurgerRenderable = renderable);
+        buildRenderable("single-patty-burger.sfb").thenAccept(renderable -> smallBurgerRenderable = renderable);
         buildRenderable("arrow.sfb").thenAccept(renderable -> targetArrowRenderable = renderable);
+        //buildChickenRiceRenderable();
 
         arFragment.getArSceneView().getScene().addOnUpdateListener(frameTime -> {
             arFragment.onUpdate(frameTime);
@@ -113,18 +116,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void renderFoodModel() {
-        Frame frame = arFragment.getArSceneView().getArFrame();
-        android.graphics.Point pt = getScreenCenter();
-        List<HitResult> hits;
-        if (frame != null) {
-            hits = frame.hitTest(pt.x, pt.y);
-            for (HitResult hit : hits) {
-                renderModel(hit, foodRenderable);
-                break;
-            }
-        }
-    }
+
 
     private void toggleOrderMenu() {
         View orderMenu = findViewById(R.id.order_menu_layout);
@@ -156,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         Util.showSplashScreen(this);
     }
 
-    private CompletableFuture<ModelRenderable> buildRenderable(String uri) {
+    CompletableFuture<ModelRenderable> buildRenderable(String uri) {
         return ModelRenderable.builder()
                 .setSource(this, Uri.parse(uri))
                 .build()
@@ -170,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Renders a toast of LENGTH_LONG at the bottom center of the screen
      */
-    private void showToast(String message) {
+    void showToast(String message) {
         Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
         toast.setGravity(Gravity.BOTTOM, 0, 0);
         toast.show();
@@ -198,6 +190,55 @@ public class MainActivity extends AppCompatActivity {
 
     private Anchor renderModel(HitResult hitResult, ModelRenderable model) {
         return renderModel(hitResult, model, true);
+    }
+
+    private void renderModel(ModelRenderable renderable) {
+        Frame frame = arFragment.getArSceneView().getArFrame();
+        android.graphics.Point pt = getScreenCenter();
+        List<HitResult> hits;
+        if (frame != null) {
+            hits = frame.hitTest(pt.x, pt.y);
+            for (HitResult hit : hits) {
+                renderModel(hit, renderable);
+                break;
+            }
+        }
+    }
+
+    private Anchor renderFood(HitResult hitResult, Food food, boolean should_select) {
+        Anchor anchor = hitResult.createAnchor();
+        AnchorNode anchorNode = new AnchorNode(anchor);
+        anchorNode.setParent(arFragment.getArSceneView().getScene());
+
+        // Create the transformable node and add it to the anchor.
+        TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
+        node.getScaleController().setSensitivity(0);  // disable pinch-and-scale
+        node.getScaleController().setMaxScale(food.maxScale);
+        node.getScaleController().setMinScale(food.minScale);
+        node.setParent(anchorNode);
+        node.setRenderable(food.getRenderable());
+        if (should_select) {
+            node.select();
+        }
+
+        return anchor;
+    }
+
+    private void renderFood(Food food) {
+        if (food.getRenderable() == null) {
+            food.build(this);
+        }
+
+        Frame frame = arFragment.getArSceneView().getArFrame();
+        android.graphics.Point pt = getScreenCenter();
+        List<HitResult> hits;
+        if (frame != null) {
+            hits = frame.hitTest(pt.x, pt.y);
+            for (HitResult hit : hits) {
+                renderFood(hit, food, true);
+                break;
+            }
+        }
     }
 
     private void updateTargetArrowNode() {
@@ -290,5 +331,21 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    public void renderBigBurger(View view) {
+        renderFood(new DoubleBurger(this));
+    }
+
+    public void renderSmallBurger(View view) {
+        renderModel(smallBurgerRenderable);
+    }
+
+    ModelRenderable temp;
+
+    public void renderChickenRice(View view) {
+        //buildRenderable("rice1_meat1_veg0.sfb").thenAccept(renderable -> temp = renderable);
+        //renderModel(temp);
+        renderFood(new ChickenRice(this, 1,1,1));
     }
 }

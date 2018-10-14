@@ -30,13 +30,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/order_menu_item_padding"
-            android:text="Small Burger" />
+            android:onClick="renderBigBurger"
+            android:text="Big Burger" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/order_menu_item_padding"
-            android:text="Big Burger" />
+            android:text="Chicken Rice"
+            android:onClick="renderChickenRice"/>
+
     </LinearLayout>
 
     <TextView
