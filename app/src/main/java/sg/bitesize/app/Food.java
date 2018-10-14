@@ -28,11 +28,16 @@ abstract class Food {
             a.showToast("No anchorNode");
             return;
         }
-
-        food.buildCF.thenRun(() -> {
+        if (food.getRenderable() != null) {
             transformableNode.setRenderable(food.getRenderable());
             transformableNode.getScaleController().setMaxScale(food.maxScale);
             transformableNode.getScaleController().setMinScale(food.minScale);
-        });
+        } else {
+            food.buildCF.thenRun(() -> {
+                transformableNode.setRenderable(food.getRenderable());
+                transformableNode.getScaleController().setMaxScale(food.maxScale);
+                transformableNode.getScaleController().setMinScale(food.minScale);
+            });
+        }
     }
 }

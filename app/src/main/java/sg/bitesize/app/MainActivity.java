@@ -87,13 +87,11 @@ public class MainActivity extends AppCompatActivity {
             toggleOrderMenu();
         });
 
-        Food lastTouched = new DoubleBurger(this);
         portion_button_add = (FloatingActionButton) findViewById(R.id.portion_button_add);
         portion_button_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showToast("Increase portion size");
-                renderFood(lastTouched);
             }
         });
 
@@ -102,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showToast("Decrease portion size");
-                lastTouched.swap(MainActivity.this, new ChickenRice(MainActivity.this, 1,1,1));
             }
         });
 
@@ -377,12 +374,37 @@ public class MainActivity extends AppCompatActivity {
 
     ModelRenderable temp;
 
+    public static ChickenRice lastTouched;
     public void renderChickenRice(View view) {
         //buildRenderable("rice1_meat1_veg0.sfb").thenAccept(renderable -> temp = renderable);
         //renderModel(temp);
-        renderFood(new ChickenRice(this, 1,1,1));
+        lastTouched = new ChickenRice(this, 1,1,1);
+        renderFood(lastTouched);
     }
 
+    public void moreRice(View view) {
+        lastTouched.upsize(this, 0);
+    }
+
+    public void lessRice(View view) {
+        lastTouched.downsize(this, 0);
+    }
+
+    public void moreMeat(View view) {
+        lastTouched.upsize(this, 1);
+    }
+
+    public void lessMeat(View view) {
+        lastTouched.downsize(this, 1);
+    }
+
+    public void moreVeg(View view) {
+        lastTouched.upsize(this, 2);
+    }
+
+    public void lessVeg(View view) {
+        lastTouched.downsize(this, 2);
+    }
     public void renderBandung(View view) {
         renderFood(new Drink(this, "bandung-beng"));
     }
