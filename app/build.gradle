@@ -76,11 +76,6 @@ dependencies {
 
 apply plugin: 'com.google.ar.sceneform.plugin'
 
-sceneform.asset('sampledata/models/andy.obj',
-        'default',
-        'sampledata/models/andy.sfa',
-        'src/main/res/raw/andy')
-
 sceneform.asset('sampledata/burger-obj/burger.obj',
         'default',
         'sampledata/burger-obj/burger.sfa',
@@ -95,3 +90,112 @@ sceneform.asset('sampledata/arrow/arrow.gltf',
         'default',
         'sampledata/arrow/arrow.sfa',
         'src/main/assets/arrow')
+
+sceneform.asset('sampledata/chicken-rice/rice1_meat1_veg0.obj', 'default',
+                'sampledata/chicken-rice/rice1_meat1_veg0.sfa',
+                        'src/main/assets/rice1_meat1_veg0')
+
+sceneform.asset('sampledata/chicken-rice/rice1_meat1_veg1.obj', 'default',
+                'sampledata/chicken-rice/rice1_meat1_veg1.sfa',
+                        'src/main/assets/rice1_meat1_veg1')
+
+sceneform.asset('sampledata/chicken-rice/rice1_meat1_veg2.obj', 'default',
+                'sampledata/chicken-rice/rice1_meat1_veg2.sfa',
+                        'src/main/assets/rice1_meat1_veg2')
+
+sceneform.asset('sampledata/chicken-rice/rice1_meat2_veg0.obj', 'default',
+                'sampledata/chicken-rice/rice1_meat2_veg0.sfa',
+                        'src/main/assets/rice1_meat2_veg0')
+
+sceneform.asset('sampledata/chicken-rice/rice1_meat2_veg1.obj', 'default',
+                'sampledata/chicken-rice/rice1_meat2_veg1.sfa',
+                        'src/main/assets/rice1_meat2_veg1')
+
+sceneform.asset('sampledata/chicken-rice/rice1_meat2_veg2.obj', 'default',
+                'sampledata/chicken-rice/rice1_meat2_veg2.sfa',
+                        'src/main/assets/rice1_meat2_veg2')
+
+sceneform.asset('sampledata/chicken-rice/rice1_meat3_veg0.obj', 'default',
+                'sampledata/chicken-rice/rice1_meat3_veg0.sfa',
+                        'src/main/assets/rice1_meat3_veg0')
+
+sceneform.asset('sampledata/chicken-rice/rice1_meat3_veg1.obj', 'default',
+                'sampledata/chicken-rice/rice1_meat3_veg1.sfa',
+                        'src/main/assets/rice1_meat3_veg1')
+
+sceneform.asset('sampledata/chicken-rice/rice1_meat3_veg2.obj', 'default',
+                'sampledata/chicken-rice/rice1_meat3_veg2.sfa',
+                        'src/main/assets/rice1_meat3_veg2')
+
+sceneform.asset('sampledata/chicken-rice/rice2_meat1_veg0.obj', 'default',
+                'sampledata/chicken-rice/rice2_meat1_veg0.sfa',
+                        'src/main/assets/rice2_meat1_veg0')
+
+sceneform.asset('sampledata/chicken-rice/rice2_meat1_veg1.obj', 'default',
+                'sampledata/chicken-rice/rice2_meat1_veg1.sfa',
+                        'src/main/assets/rice2_meat1_veg1')
+
+sceneform.asset('sampledata/chicken-rice/rice2_meat1_veg2.obj', 'default',
+                'sampledata/chicken-rice/rice2_meat1_veg2.sfa',
+                        'src/main/assets/rice2_meat1_veg2')
+
+sceneform.asset('sampledata/chicken-rice/rice2_meat2_veg0.obj', 'default',
+                'sampledata/chicken-rice/rice2_meat2_veg0.sfa',
+                        'src/main/assets/rice2_meat2_veg0')
+
+sceneform.asset('sampledata/chicken-rice/rice2_meat2_veg1.obj', 'default',
+                'sampledata/chicken-rice/rice2_meat2_veg1.sfa',
+                        'src/main/assets/rice2_meat2_veg1')
+
+sceneform.asset('sampledata/chicken-rice/rice2_meat2_veg2.obj', 'default',
+                'sampledata/chicken-rice/rice2_meat2_veg2.sfa',
+                        'src/main/assets/rice2_meat2_veg2')
+
+sceneform.asset('sampledata/chicken-rice/rice2_meat3_veg0.obj', 'default',
+                'sampledata/chicken-rice/rice2_meat3_veg0.sfa',
+                        'src/main/assets/rice2_meat3_veg0')
+
+sceneform.asset('sampledata/chicken-rice/rice2_meat3_veg1.obj', 'default',
+                'sampledata/chicken-rice/rice2_meat3_veg1.sfa',
+                        'src/main/assets/rice2_meat3_veg1')
+
+sceneform.asset('sampledata/chicken-rice/rice2_meat3_veg2.obj', 'default',
+                'sampledata/chicken-rice/rice2_meat3_veg2.sfa',
+                        'src/main/assets/rice2_meat3_veg2')
+
+sceneform.asset('sampledata/chicken-rice/rice3_meat1_veg0.obj', 'default',
+                'sampledata/chicken-rice/rice3_meat1_veg0.sfa',
+                        'src/main/assets/rice3_meat1_veg0')
+
+sceneform.asset('sampledata/chicken-rice/rice3_meat1_veg1.obj', 'default',
+                'sampledata/chicken-rice/rice3_meat1_veg1.sfa',
+                        'src/main/assets/rice3_meat1_veg1')
+
+sceneform.asset('sampledata/chicken-rice/rice3_meat1_veg2.obj', 'default',
+                'sampledata/chicken-rice/rice3_meat1_veg2.sfa',
+                        'src/main/assets/rice3_meat1_veg2')
+
+sceneform.asset('sampledata/chicken-rice/rice3_meat2_veg0.obj', 'default',
+                'sampledata/chicken-rice/rice3_meat2_veg0.sfa',
+                        'src/main/assets/rice3_meat2_veg0')
+
+sceneform.asset('sampledata/chicken-rice/rice3_meat2_veg1.obj', 'default',
+                'sampledata/chicken-rice/rice3_meat2_veg1.sfa',
+                        'src/main/assets/rice3_meat2_veg1')
+
+sceneform.asset('sampledata/chicken-rice/rice3_meat2_veg2.obj', 'default',
+                'sampledata/chicken-rice/rice3_meat2_veg2.sfa',
+                        'src/main/assets/rice3_meat2_veg2')
+
+sceneform.asset('sampledata/chicken-rice/rice3_meat3_veg0.obj', 'default',
+                'sampledata/chicken-rice/rice3_meat3_veg0.sfa',
+                        'src/main/assets/rice3_meat3_veg0')
+
+sceneform.asset('sampledata/chicken-rice/rice3_meat3_veg1.obj', 'default',
+                'sampledata/chicken-rice/rice3_meat3_veg1.sfa',
+                        'src/main/assets/rice3_meat3_veg1')
+
+sceneform.asset('sampledata/chicken-rice/rice3_meat3_veg2.obj', 'default',
+                'sampledata/chicken-rice/rice3_meat3_veg2.sfa',
+                        'src/main/assets/rice3_meat3_veg2')
+
