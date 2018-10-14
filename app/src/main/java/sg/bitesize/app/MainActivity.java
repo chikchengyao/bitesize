@@ -128,6 +128,9 @@ public class MainActivity extends AppCompatActivity {
             orderMenu.setVisibility(View.VISIBLE);
             orderMenu.bringToFront();
         }
+        if (isCheckoutVisible) {
+            toggleCheckout(null);
+        }
         isOrderMenuVisible = !isOrderMenuVisible;
     }
 
