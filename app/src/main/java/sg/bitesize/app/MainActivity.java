@@ -28,6 +28,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.ar.core.Anchor;
@@ -138,6 +139,27 @@ public class MainActivity extends AppCompatActivity {
         if (isCheckoutVisible) {
             checkoutView.setVisibility(View.INVISIBLE);
         } else {
+            TextView itemsTextView = findViewById(R.id.checkout_items);
+            TextView pricesTextView = findViewById(R.id.checkout_prices);
+            // Don't judge me; we're out of time!
+            itemsTextView.setText(
+                      "Chicken Rice\n"
+                    + "    * less rice (-10c)\n"
+                    + "    * no vegetables (-20c)\n"
+                    + "Chicken Rice\n"
+                    + "    * more chicken (+50c)\n"
+                    + "    * more rice (+20c)\n"
+                    + "Bandung Beng x 3"
+            );
+            pricesTextView.setText(
+                    "$2.70\n"
+                    + "\n"
+                    + "\n"
+                    + "$3.30\n"
+                    + "\n"
+                    + "\n"
+                    + "$3.60"
+            );
             checkoutView.setVisibility(View.VISIBLE);
             checkoutView.bringToFront();
         }

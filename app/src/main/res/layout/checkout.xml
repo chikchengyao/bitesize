@@ -27,13 +27,33 @@
             android:textSize="36dp"
             android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/checkout_content"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/order_menu_item_padding"
-            android:text="" />
+            android:layout_gravity="top"
+            android:gravity="top">
 
+            <TextView
+                android:id="@+id/checkout_items"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="top"
+                android:gravity="top"
+                android:padding="@dimen/order_menu_item_padding"
+                android:text="" />
+
+            <TextView
+                android:paddingTop="10dp"
+                android:id="@+id/checkout_prices"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:layout_gravity="top"
+                android:gravity="top"
+                android:text=""/>
+
+        </LinearLayout>
     </LinearLayout>
 
     <TextView
