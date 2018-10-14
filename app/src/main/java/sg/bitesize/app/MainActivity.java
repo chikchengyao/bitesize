@@ -243,6 +243,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateTargetArrowNode() {
         if (isTracking && isHitting) {
+            if (!isOrderMenuVisible && targetArrowAnchor != null) {
+                targetArrowAnchor.detach();
+                return;
+            }
             Frame frame = arFragment.getArSceneView().getArFrame();
             android.graphics.Point pt = getScreenCenter();
             List<HitResult> hits;
