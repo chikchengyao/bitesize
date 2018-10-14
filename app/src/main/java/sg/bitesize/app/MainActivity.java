@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             if (currSize == 0) { // Render a medium sized image.
                 AnchorNode oldAnchorNode = nodeMap.get(lastTouchedFood);
-                nodeMap.get(lastTouchedFood).removeChild(lastTouchedFood);
+                oldAnchorNode.removeChild(lastTouchedFood);
                 nodeMap.remove(lastTouchedFood);
                 TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
                 node.getScaleController().setSensitivity(0);  // disable pinch-and-scale
@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 node.setOnTapListener((v, event) -> {
                     lastTouchedFood = node;
                 });
+                lastTouchedFood = node;
                 nodeMap.put(node, oldAnchorNode);
                 currSize++;
             } else if (currSize == 1) { // Render a large sized image.
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 node.setOnTapListener((v, event) -> {
                     lastTouchedFood = node;
                 });
+                lastTouchedFood = node;
                 nodeMap.put(node, oldAnchorNode);
                 currSize++;
             } else if (currSize == 2) { // Do nothing.
@@ -222,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
           lastTouchedFood = node;
           Toast.makeText(c, "Burger touched", Toast.LENGTH_LONG).show();
       });
+      lastTouchedFood = node;
       nodeMap.put(node, anchorNode);
   }
 
