@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private ModelRenderable bigBurgerRenderable;
     private ModelRenderable smallBurgerRenderable;
     private ModelRenderable targetArrowRenderable;
+    private ModelRenderable[][][] chickenRiceRenderable;
 
     FloatingActionButton portion_button_add, portion_button_remove;
 
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         buildRenderable("burger.sfb").thenAccept(renderable -> bigBurgerRenderable = renderable);
         buildRenderable("single-patty-burger.sfb").thenAccept(renderable -> smallBurgerRenderable = renderable);
         buildRenderable("arrow.sfb").thenAccept(renderable -> targetArrowRenderable = renderable);
+        buildChickenRiceRenderable();
 
         arFragment.getArSceneView().getScene().addOnUpdateListener(frameTime -> {
             arFragment.onUpdate(frameTime);
@@ -112,9 +114,23 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private static int renders = 0;
+    private void buildChickenRiceRenderable() {
+        for (int rice = 0; rice < 3; rice++) {
+            for (int meat = 0; meat < 3; meat++) {
+                for (int veg = 0; veg < 3; veg++) {
+                    String uri = String.format("rice%d-meat%d-veg%d.sfb", rice + 1, meat + 1, veg);
+                    final int r = rice;
+                    final int m = meat;
+                    final int v = veg;
+                    buildRenderable(uri)
+                            .thenAccept(renderable ->
+                                    chickenRiceRenderable[r][m][v] = renderable);
+                }
+            }
+        }
+    }
+
     private void renderModel(ModelRenderable renderable) {
-        showToast("" + ++renders);
         Frame frame = arFragment.getArSceneView().getArFrame();
         android.graphics.Point pt = getScreenCenter();
         List<HitResult> hits;
