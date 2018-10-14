@@ -116,8 +116,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-
     private void toggleOrderMenu() {
         View orderMenu = findViewById(R.id.order_menu_layout);
         if (isOrderMenuVisible) {
@@ -351,5 +349,17 @@ public class MainActivity extends AppCompatActivity {
         //buildRenderable("rice1_meat1_veg0.sfb").thenAccept(renderable -> temp = renderable);
         //renderModel(temp);
         renderFood(new ChickenRice(this, 1,1,1));
+    }
+
+    public void renderBandung(View view) {
+        renderFood(new Drink(this, "bandung-beng"));
+    }
+
+    public void renderKopi(View view) {
+        renderFood(new Drink(this, "kopi-o-kosing"));
+    }
+
+    public void renderTeh(View view) {
+        renderFood(new Drink(this, "teh-beng"));
     }
 }

@@ -40,6 +40,26 @@
             android:text="Chicken Rice"
             android:onClick="renderChickenRice"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/order_menu_item_padding"
+            android:text="Kopi O Kosong Beng"
+            android:onClick="renderKopi"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/order_menu_item_padding"
+            android:text="Teh Beng"
+            android:onClick="renderTeh"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/order_menu_item_padding"
+            android:text="Bandung"
+            android:onClick="renderBandung"/>
     </LinearLayout>
 
     <TextView

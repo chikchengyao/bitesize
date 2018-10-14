@@ -1,7 +1,5 @@
 package sg.bitesize.app;
 
-import android.app.Activity;
-
 import com.google.ar.sceneform.rendering.ModelRenderable;
 
 public class DoubleBurger extends Food {

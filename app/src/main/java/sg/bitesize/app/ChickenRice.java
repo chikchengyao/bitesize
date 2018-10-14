@@ -6,7 +6,6 @@ import com.google.ar.sceneform.rendering.ModelRenderable;
 
 class ChickenRice extends Food {
     public int rice, meat, veg;
-
     public static ModelRenderable[][][] renderables = new ModelRenderable[3][3][3];
 
     public ChickenRice(MainActivity a, int r, int m, int v) {
