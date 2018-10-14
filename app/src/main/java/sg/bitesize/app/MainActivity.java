@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     private ModelRenderable smallBurgerRenderable;
     private ModelRenderable targetArrowRenderable;
 
+    public static int upsizeType = 0;
+
     FloatingActionButton portion_button_add, portion_button_remove;
 
     @Override
@@ -87,11 +89,13 @@ public class MainActivity extends AppCompatActivity {
             toggleOrderMenu();
         });
 
+
+
         portion_button_add = (FloatingActionButton) findViewById(R.id.portion_button_add);
         portion_button_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showToast("Increase portion size");
+                if (lastTouched != null) lastTouched.upsize(MainActivity.this, upsizeType);
             }
         });
 
@@ -99,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         portion_button_remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showToast("Decrease portion size");
+                if (lastTouched != null) lastTouched.downsize(MainActivity.this, upsizeType);
             }
         });
 
@@ -415,5 +419,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void renderTeh(View view) {
         renderFood(new Drink(this, "teh-beng"));
+    }
+
+    public void setUpsizeRice(View view) {
+        upsizeType = 0;
+    }
+
+    public void setUpsizeMeat(View view) {
+        upsizeType = 1;
+    }
+
+    public void setUpsizeVeg(View view) {
+        upsizeType = 2;
     }
 }

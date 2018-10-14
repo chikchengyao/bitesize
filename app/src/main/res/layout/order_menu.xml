@@ -13,6 +13,7 @@
     android:visibility="invisible">
 
     <LinearLayout
+        android:id="@+id/food_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -62,60 +63,94 @@
             android:onClick="renderBandung"/>
     </LinearLayout>
 
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_alignParentBottom="true">-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="@dimen/order_menu_item_padding"-->
+            <!--android:textSize="28dp"-->
+            <!--android:text="Modify"/>-->
+
+        <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:padding="@dimen/order_menu_item_padding"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:text="More rice"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:onClick="moreRice"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content" />&ndash;&gt;-->
+
+        <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:padding="@dimen/order_menu_item_padding"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:text="Less rice"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:onClick="lessRice"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content" />&ndash;&gt;-->
+
+        <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:padding="@dimen/order_menu_item_padding"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:text="More meat"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:onClick="moreMeat"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content" />&ndash;&gt;-->
+
+        <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:padding="@dimen/order_menu_item_padding"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:text="Less meat"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:onClick="lessMeat"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content" />&ndash;&gt;-->
+
+        <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:padding="@dimen/order_menu_item_padding"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:text="More veg"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:onClick="moreVeg"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content" />&ndash;&gt;-->
+
+        <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:padding="@dimen/order_menu_item_padding"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:text="Less veg"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:onClick="lessVeg"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content" />&ndash;&gt;-->
+
+    <!--</LinearLayout>-->
+
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_below="@id/food_menu"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true">
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/order_menu_item_padding"
+            android:text="Modify: "/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/order_menu_item_padding"
-            android:textSize="28dp"
-            android:text="Modify"/>
+            android:text="Rice"
+            android:onClick="setUpsizeRice"/>
 
         <TextView
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:padding="@dimen/order_menu_item_padding"
-            android:text="More rice"
-            android:onClick="moreRice"
-            android:layout_height="wrap_content" />
+            android:text="Meat"
+            android:onClick="setUpsizeMeat"/>
 
         <TextView
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:padding="@dimen/order_menu_item_padding"
-            android:text="Less rice"
-            android:onClick="lessRice"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:padding="@dimen/order_menu_item_padding"
-            android:text="More meat"
-            android:onClick="moreMeat"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:padding="@dimen/order_menu_item_padding"
-            android:text="Less meat"
-            android:onClick="lessMeat"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:padding="@dimen/order_menu_item_padding"
-            android:text="More veg"
-            android:onClick="moreVeg"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:padding="@dimen/order_menu_item_padding"
-            android:text="Less veg"
-            android:onClick="lessVeg"
-            android:layout_height="wrap_content" />
+            android:text="Veg"
+            android:onClick="setUpsizeVeg"/>
 
     </LinearLayout>
 
