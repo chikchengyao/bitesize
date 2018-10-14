@@ -11,6 +11,13 @@ public class DoubleBurger extends Food {
         build(a);
     }
 
+    public DoubleBurger(MainActivity a, float size) {
+        uri = "burger.sfb";
+        minScale = size;
+        maxScale = size + 0.001f;
+        build(a);
+    }
+
     public ModelRenderable getRenderable(){
         return genericRenderable;
     }

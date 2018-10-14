@@ -21,7 +21,7 @@ class ChickenRice extends Food {
     @Override
     public void build(MainActivity a) {
         if (renderables[rice][meat][veg] == null) {
-            a.buildRenderable(uri).thenAccept(rend -> renderables[rice][meat][veg] = rend);
+            buildCF = a.buildRenderable(uri).thenAccept(rend -> renderables[rice][meat][veg] = rend);
         }
     }
 
