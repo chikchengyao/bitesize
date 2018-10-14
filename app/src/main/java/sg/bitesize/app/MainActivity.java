@@ -55,8 +55,10 @@ public class MainActivity extends AppCompatActivity {
 
     private ArFragment arFragment;
     private Anchor targetArrowAnchor;
-    private boolean isTracking;
     private boolean isHitting;
+    private boolean isTracking;
+    private boolean isOrderMenuVisible = false;
+    private boolean isCheckoutVisible = false;
     private FloatingActionButton addButton;
     private ModelRenderable foodRenderable;
     private ModelRenderable targetArrowRenderable;
@@ -124,8 +126,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private static boolean isOrderMenuVisible = false;
-
     private void toggleOrderMenu() {
         View orderMenu = findViewById(R.id.order_menu_layout);
         if (isOrderMenuVisible) {
@@ -135,6 +135,20 @@ public class MainActivity extends AppCompatActivity {
             orderMenu.bringToFront();
         }
         isOrderMenuVisible = !isOrderMenuVisible;
+    }
+
+    protected void toggleCheckout(View orderMenuView) {
+        View checkoutView = findViewById(R.id.checkout);
+        if (isOrderMenuVisible) {
+            toggleOrderMenu();
+        }
+        if (isCheckoutVisible) {
+            checkoutView.setVisibility(View.INVISIBLE);
+        } else {
+            checkoutView.setVisibility(View.VISIBLE);
+            checkoutView.bringToFront();
+        }
+        isCheckoutVisible = !isCheckoutVisible;
     }
 
     protected void onResume() {

@@ -67,6 +67,8 @@
 
     <include layout="@layout/order_menu" />
 
+    <include layout="@layout/checkout" />
+
     <include layout="@layout/splash_screen" />
 
 </RelativeLayout>
