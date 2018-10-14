@@ -199,3 +199,14 @@ sceneform.asset('sampledata/chicken-rice/rice3_meat3_veg2.obj', 'default',
                 'sampledata/chicken-rice/rice3_meat3_veg2.sfa',
                         'src/main/assets/rice3_meat3_veg2')
 
+sceneform.asset('sampledata/drinks/bandung-beng.obj', 'default',
+                'sampledata/drinks/bandung-beng.sfa',
+                  'src/main/assets/bandung-beng')
+
+sceneform.asset('sampledata/drinks/kopi-o-kosong.obj', 'default',
+                'sampledata/drinks/kopi-o-kosong.sfa',
+                  'src/main/assets/kopi-o-kosong')
+
+sceneform.asset('sampledata/drinks/teh-beng.obj', 'default',
+                'sampledata/drinks/teh-beng.sfa',
+                  'src/main/assets/teh-beng')
