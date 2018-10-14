@@ -23,11 +23,9 @@ import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 import com.google.ar.core.Anchor;
@@ -37,13 +35,14 @@ import com.google.ar.core.Plane;
 import com.google.ar.core.Trackable;
 import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.AnchorNode;
+import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
-import sg.bitesize.app.R;
 
 /**
  * This is an example activity that uses the Sceneform UX package to make common AR tasks easier.
@@ -56,8 +55,15 @@ public class MainActivity extends AppCompatActivity {
   private boolean isTracking;
   private boolean isHitting;
   private FloatingActionButton addButton;
-  private ModelRenderable foodRenderable;
   private ModelRenderable targetArrowRenderable;
+  private ModelRenderable burgerSmall;
+  private ModelRenderable burgerMedium;
+  private ModelRenderable burgerLarge;
+  private TransformableNode lastTouchedFood;
+  private AnchorNode lastTouchedAnchorNode;
+  private Anchor lastTouchedAnchor;
+  private int currSize; // 0 if small, 1 if medium and 3 if large.
+  private HashMap<TransformableNode, AnchorNode> nodeMap = new HashMap<>();
 
   FloatingActionButton portion_button_add, portion_button_remove;
 
@@ -83,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         if (frame != null) {
             hits = frame.hitTest(pt.x, pt.y);
             for (HitResult hit : hits) {
-                renderModel(hit, foodRenderable);
+                renderModel(hit, burgerSmall);
                 break;
             }
         }
@@ -92,17 +98,70 @@ public class MainActivity extends AppCompatActivity {
     portion_button_add = (FloatingActionButton)findViewById(R.id.portion_button_add);
     portion_button_add.setOnClickListener(new View.OnClickListener() {
         @Override
-        public void onClick(View view) { showToast("Increase portion size"); }
+        public void onClick(View view) {
+            Anchor newAnchor = nodeMap.get(lastTouchedFood).getAnchor();
+            if (currSize == 0) { // Render a medium sized image.
+                AnchorNode anchorNode = new AnchorNode(nodeMap.get(lastTouchedFood).getAnchor());
+                anchorNode.setParent(arFragment.getArSceneView().getScene());
+                TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
+                node.getScaleController().setSensitivity(0);  // disable pinch-and-scale
+                node.setParent(anchorNode);
+                node.setRenderable(burgerMedium);
+                node.select();
+                //nodeMap.get(lastTouchedFood).getAnchor().detach();
+                currSize++;
+            } else if (currSize == 1) { // Render a large sized image.
+                AnchorNode anchorNode = new AnchorNode(nodeMap.get(lastTouchedFood).getAnchor());
+                anchorNode.setParent(arFragment.getArSceneView().getScene());
+                TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
+                node.getScaleController().setSensitivity(0);  // disable pinch-and-scale
+                node.setParent(anchorNode);
+                node.setRenderable(burgerLarge);
+                node.select();
+                //nodeMap.get(lastTouchedFood).getAnchor().detach();
+                currSize++;
+            } else if (currSize == 2) { // Do nothing.
+                return;
+            }
+            showToast("Increase portion size");
+        }
     });
 
     portion_button_remove = (FloatingActionButton)findViewById(R.id.portion_button_remove);
     portion_button_remove.setOnClickListener(new View.OnClickListener() {
         @Override
-        public void onClick(View view) { showToast("Decrease portion size"); }
+        public void onClick(View view) {
+            Anchor newAnchor = nodeMap.get(lastTouchedFood).getAnchor();
+            nodeMap.get(lastTouchedFood).getAnchor().detach();
+            if (currSize == 0) { // Do nothing
+                return;
+            } else if (currSize == 1) { // Render a small sized image.
+                AnchorNode anchorNode = new AnchorNode(newAnchor);
+                anchorNode.setParent(arFragment.getArSceneView().getScene());
+                TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
+                node.getScaleController().setSensitivity(0);  // disable pinch-and-scale
+                node.setParent(anchorNode);
+                node.setRenderable(burgerSmall);
+                node.select();
+                currSize--;
+            } else if (currSize == 2) { // Render a medium sized image.
+                AnchorNode anchorNode = new AnchorNode(newAnchor);
+                anchorNode.setParent(arFragment.getArSceneView().getScene());
+                TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
+                node.getScaleController().setSensitivity(0);  // disable pinch-and-scale
+                node.setParent(anchorNode);
+                node.setRenderable(burgerMedium);
+                node.select();
+                currSize--;
+            }
+            showToast("Decrease portion size");
+        }
     });
 
     arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
-    buildRenderable("burger.sfb").thenAccept(renderable -> foodRenderable = renderable);
+    buildRenderable("burger.sfb").thenAccept(renderable -> burgerSmall = renderable);
+    buildRenderable("burger-medium.sfb").thenAccept(renderable -> burgerMedium = renderable);
+    buildRenderable("burger-large.sfb").thenAccept(renderable -> burgerLarge = renderable);
     buildRenderable("arrow.sfb").thenAccept(renderable -> targetArrowRenderable = renderable);
 
     arFragment.getArSceneView().getScene().addOnUpdateListener(frameTime -> {
@@ -144,6 +203,9 @@ public class MainActivity extends AppCompatActivity {
       Anchor anchor = hitResult.createAnchor();
       AnchorNode anchorNode = new AnchorNode(anchor);
       anchorNode.setParent(arFragment.getArSceneView().getScene());
+      anchorNode.setOnTapListener((v, event) -> {
+          lastTouchedAnchorNode = anchorNode;
+      });
 
       // Create the transformable node and add it to the anchor.
       TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
@@ -151,6 +213,12 @@ public class MainActivity extends AppCompatActivity {
       node.setParent(anchorNode);
       node.setRenderable(model);
       node.select();
+      Context c = this;
+      node.setOnTapListener((v, event) -> {
+          lastTouchedFood = node;
+          Toast.makeText(c, "Burger touched", Toast.LENGTH_LONG).show();
+      });
+      nodeMap.put(node, anchorNode);
   }
 
   /**

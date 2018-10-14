@@ -95,3 +95,13 @@ sceneform.asset('sampledata/arrow/arrow.gltf',
         'default',
         'sampledata/arrow/arrow.sfa',
         'src/main/assets/arrow')
+
+sceneform.asset('sampledata/burger-obj-large/burger-large.obj',
+        'default',
+        'sampledata/burger-obj-large/burger-large.sfa',
+        'src/main/assets/burger-large')
+
+sceneform.asset('sampledata/burger-obj-medium/burger-medium.obj',
+        'default',
+        'sampledata/burger-obj-medium/burger-medium.sfa',
+        'src/main/assets/burger-medium')

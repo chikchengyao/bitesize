@@ -1,0 +1,50 @@
+{
+  materials: [
+    {
+      name: 'Mat_1',
+      parameters: [
+        {
+          baseColor: 'Big Mac UV 3',
+        },
+        {
+          baseColorTint: [
+            0.80000000000000004,
+            0.80000000000000004,
+            0.80000000000000004,
+            1,
+          ],
+        },
+        {
+          metallic: 1,
+        },
+        {
+          roughness: 0.14280000000000001,
+        },
+        {
+          opacity: null,
+        },
+      ],
+      source: 'build/sceneform_sdk/default_materials/obj_material.sfm',
+    },
+  ],
+  model: {
+    attributes: [
+      'Position',
+      'TexCoord',
+      'Orientation',
+    ],
+    collision: {},
+    file: 'sampledata/burger-obj-medium/burger-medium.obj',
+    name: 'burger-medium',
+    recenter: 'root',
+    scale: 0.0004,
+  },
+  samplers: [
+    {
+      file: 'sampledata/burger-obj-medium/Big Mac UV 3.jpg',
+      name: 'Big Mac UV 3',
+      pipeline_name: 'Big Mac UV 3.jpg',
+    },
+  ],
+  version: '0.52:1',
+}
